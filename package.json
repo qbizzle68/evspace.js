@@ -1,0 +1,32 @@
+{
+  "name": "evspace",
+  "version": "0.1.0",
+  "description": "3-dimensional Euclidean vector space module.",
+  "main": "evspace.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qbizzle68/evspace.js.git"
+  },
+  "keywords": [
+    "vector space",
+    "vector",
+    "matrix",
+    "rotate",
+    "3d"
+  ],
+  "author": "Quinton Barnes",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/qbizzle68/evspace.js/issues"
+  },
+  "homepage": "https://github.com/qbizzle68/evspace.js#readme",
+  "devDependencies": {
+    "jest": "^29.5.0"
+  }
+}
