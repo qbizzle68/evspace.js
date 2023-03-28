@@ -11,17 +11,18 @@ class Matrix {
             this.#data = [...Array(3)].map(e => Array(3));
         }
         if (arr.length != 3) {
-            throw 'arr must have 3 rows';
+            throw RangeError('arr must have 3 rows');
         }
         for (let i = 0; i < 3; i++) {
             if (arr[i].length != 3) {
-                throw `row ${i} must have 3 columns`;
+                throw RangeError(`row ${i} must have 3 columns`);
             }
             for (let j = 0; j < 3; j++) {
-                if (isNaN(arr[i][j])) {
-                    throw `element [${i}][${j}] is not a number`;
+                if ((arr[i][j] || false) && isNaN(arr[i][j])) {
+                    throw TypeError(`element [${i}][${j}] is not a number`);
                 }
-                this.#data[i][j] = arr[i][j];
+
+                this.#data[i][j] = arr[i][j] || 0;
             }
         }
     }
@@ -39,7 +40,7 @@ class Matrix {
 
     add(rhs) {
         if (!(rhs instanceof Matrix)) {
-            throw 'rhs is not a Matrix';
+            throw TypeError('rhs is not a Matrix');
         }
         const rtn = new Matrix();
         for (let i = 0; i < 3; i++) {
@@ -52,7 +53,7 @@ class Matrix {
 
     subtract(rhs) {
         if (!(rhs instanceof Matrix)) {
-            throw 'rhs is not a Matrix';
+            throw TypeError('rhs is not a Matrix');
         }
         const rtn = new Matrix();
         for (let i = 0; i < 3; i++) {
@@ -94,12 +95,12 @@ class Matrix {
             }
             return rtn;
         }
-        throw 'rhs is not a Matrix, Vector or number';
+        throw TypeError('rhs is not a Matrix, Vector or number');
     }
 
     divide(rhs) {
         if (isNaN(rhs)) {
-            throw 'rhs is not a number';
+            throw TypeError('rhs is not a number');
         }
         let rtn = new Matrix();
         for (let i = 0; i < 3; i++) {
@@ -112,7 +113,7 @@ class Matrix {
 
     addEqual(rhs) {
         if (!(rhs instanceof Matrix)) {
-            throw 'rhs is not a Matrix';
+            throw TypeError('rhs is not a Matrix');
         }
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
@@ -124,7 +125,7 @@ class Matrix {
 
     subtractEqual(rhs) {
         if (!(rhs instanceof Matrix)) {
-            throw 'rhs is not a Matrix';
+            throw TypeError('rhs is not a Matrix');
         }
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
@@ -155,12 +156,12 @@ class Matrix {
             }
             return this;
         }
-        throw 'rhs is not a Matrix or number';
+        throw TypeError('rhs is not a Matrix or number');
     }
 
     divideEqual(rhs) {
         if (isNaN(rhs)) {
-            throw 'rhs is not a number';
+            throw TypeError('rhs is not a number');
         }
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
@@ -182,30 +183,30 @@ class Matrix {
 
     get(row, col) {
         if (isNaN(row)) {
-            throw 'row index is not a number';
+            throw TypeError('row index is not a number');
         } else if (isNaN(col)) {
-            throw 'column index is not a number';
+            throw TypeError('column index is not a number');
         }
         if (row < 0 || row > 2) {
-            throw `row index out of bounds (row = ${row})`;
+            throw RangeError(`row index out of bounds (row = ${row})`);
         } else if (col < 0 || col > 2) {
-            throw `column index out of bounds (col = ${col})`;
+            throw RangeError(`column index out of bounds (col = ${col})`);
         }
         return this.#data[row][col];
     }
 
     set(row, col, val) {
         if (isNaN(row)) {
-            throw 'row index is not a number';
+            throw TypeError('row index is not a number');
         } else if (isNaN(col)) {
-            throw 'column index is not a number';
+            throw TypeError('column index is not a number');
         } else if (isNaN(val)) {
-            throw 'val is not a number';
+            throw TypeError('val is not a number');
         }
         if (row < 0 || row > 2) {
-            throw `row index out of bounds (row = ${row})`;
+            throw RangeError(`row index out of bounds (row = ${row})`);
         } else if (col < 0 || col > 2) {
-            throw `column index out of bounds (col = ${col})`;
+            throw RangeError(`column index out of bounds (col = ${col})`);
         }
         this.#data[row][col] = val;
     }

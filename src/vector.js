@@ -5,16 +5,16 @@ class Vector {
 
     constructor(x, y, z) {
         if ((x||false) && isNaN(x)) {
-            throw 'x component is not a number';
+            throw TypeError('x component is not a number');
         }
         if ((y||false) && isNaN(y)) {
-            throw 'y component is not a number';
+            throw TypeError('y component is not a number');
         }
         if ((z||false) && isNaN(z)) {
-            throw 'z component is not a number';
+            throw TypeError('z component is not a number');
         }
 
-        this.#data = [x, y, z];
+        this.#data = [x || 0, y || 0, z || 0];
     }
 
     [Symbol.iterator]() {
@@ -30,7 +30,7 @@ class Vector {
 
     add(rhs) {
         if (!(rhs instanceof Vector)) {
-            throw 'rhs is not a Vector';
+            throw TypeError('rhs is not a Vector');
         }
         return new Vector(this.#data[0] + rhs.#data[0],
                           this.#data[1] + rhs.#data[1],
@@ -39,7 +39,7 @@ class Vector {
 
     subtract(rhs) {
         if (!(rhs instanceof Vector)) {
-            throw 'rhs is not a Vector';
+            throw TypeError('rhs is not a Vector');
         }
         return new Vector(this.#data[0] - rhs.#data[0],
                           this.#data[1] - rhs.#data[1],
@@ -62,12 +62,12 @@ class Vector {
                               this.#data[1] * rhs,
                               this.#data[2] * rhs);
         }
-        throw 'rhs is not a number';
+        throw TypeError('rhs is not a Matrix or number');
     }
 
     divide(rhs) {
         if (isNaN(rhs)) {
-            throw 'rhs is not a number';
+            throw TypeError('rhs is not a number');
         }
         return new Vector(this.#data[0] / rhs,
                           this.#data[1] / rhs,
@@ -76,7 +76,7 @@ class Vector {
 
     addEqual(rhs) {
         if (!(rhs instanceof Vector)) {
-            throw 'rhs is not a Vector';
+            throw TypeError('rhs is not a Vector');
         }
         this.#data[0] += rhs.#data[0];
         this.#data[1] += rhs.#data[1];
@@ -86,7 +86,7 @@ class Vector {
 
     subtractEqual(rhs) {
         if (!(rhs instanceof Vector)) {
-            throw 'rhs is not a Vector';
+            throw TypeError('rhs is not a Vector');
         }
         this.#data[0] -= rhs.#data[0];
         this.#data[1] -= rhs.#data[1];
@@ -111,12 +111,12 @@ class Vector {
             }
             return this;
         }
-        throw 'rhs is not a Number';
+        throw TypeError('rhs is not a Matrix or number');
     }
 
     divideEqual(rhs) {
         if (isNaN(rhs)) {
-            throw 'rhs is not a Number';
+            throw TypeError('rhs is not a number');
         }
 
         this.#data[0] /= rhs;
@@ -132,7 +132,7 @@ class Vector {
 
     get(index) {
         if (isNaN(index)) {
-            throw 'index is not a number';
+            throw TypeError('index is not a number');
         }
 
         return this.#data[index];

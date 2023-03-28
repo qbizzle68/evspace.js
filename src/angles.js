@@ -2,6 +2,7 @@ class Angles {
     #alpha;
     #beta;
     #gamma;
+
     constructor(alpha, beta, gamma) {
         if (isNaN(alpha)) {
             throw 'alpha is not a number';
@@ -34,6 +35,7 @@ class Angles {
         if (isNaN(val)) {
             throw 'value is not a number';
         }
+
         this.#alpha = val;
     }
 
@@ -41,6 +43,7 @@ class Angles {
         if (isNaN(val)) {
             throw 'value is not a number';
         }
+
         this.#beta = val;
     }
 
@@ -48,6 +51,7 @@ class Angles {
         if (isNaN(val)) {
             throw 'value is not a number';
         }
+        
         this.#gamma = val;
     }
 

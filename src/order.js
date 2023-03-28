@@ -5,13 +5,13 @@ class Order {
 
     constructor(first, second, third) {
         if (!(first instanceof Axis.Direction)) {
-            throw 'first axis is not an Axis.Direction';
+            throw TypeError('first axis is not an Axis.Direction');
         }
         else if (!(second instanceof Axis.Direction)) {
-            throw 'second axis is not an Axis.Direction';
+            throw TypeError('second axis is not an Axis.Direction');
         }
         else if (!(third instanceof Axis.Direction)) {
-            throw 'third axis is not an Axis.Direction';
+            throw TypeError('third axis is not an Axis.Direction');
         }
 
         this.#first = first;
@@ -31,6 +31,17 @@ class Order {
         return this.#third;
     }
 
+    get(index) {
+        if (isNaN(index)) {
+            throw TypeError('index is not a number');
+        }
+        if (index < 0 || index > 2) {
+            throw RangeError(`index is out of range (index = ${index})`);
+        }
+
+        return [this.#first, this.#second, this.#third][index];
+    }
+
     toString() {
         const first = this.#first.toString();
         const second = this.#second.toString();
@@ -45,10 +56,10 @@ class Axis {
         #val
         constructor(val) {
             if (isNaN(val)) {
-                throw 'axis direction is not a number';
+                throw TypeError('axis direction is not a number');
             }
             else if (val < 0 || val > 2) {
-                throw `axis direction is out of bounds (val = ${val})`;
+                throw RangeError(`axis direction is out of bounds (val = ${val})`);
             }
             this.#val = val;
         }
@@ -84,4 +95,5 @@ const YZY = new Order(Axis.Y_AXIS, Axis.Z_AXIS, Axis.Y_AXIS);
 const ZXZ = new Order(Axis.Z_AXIS, Axis.X_AXIS, Axis.Z_AXIS);
 const ZYZ = new Order(Axis.Z_AXIS, Axis.Y_AXIS, Axis.Z_AXIS);
 
-module.exports = { XYZ, XZY, YXZ, YZX, ZXY, ZYX, XYX, XZX, YXY, YZY, ZXZ, ZYZ };
+module.exports = { Order, Axis, XYZ, XZY, YXZ, YZX, ZXY, ZYX,
+                   XYX, XZX, YXY, YZY, ZXZ, ZYZ };
