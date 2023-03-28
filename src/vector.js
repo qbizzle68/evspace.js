@@ -1,6 +1,6 @@
-import Matrix from './matrix.js';
+const Matrix = require('./matrix.js');
 
-export default class Vector {
+class Vector {
     #data = [0, 0, 0];
     constructor(x, y, z) {
         if (isNaN(x)) {
@@ -172,3 +172,5 @@ export default class Vector {
     }
 
 }
+
+module.exports = Vector;

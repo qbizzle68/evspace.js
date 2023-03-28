@@ -1,9 +1,9 @@
-import { Vector } from './vector.js';
-import { Matrix } from './matrix.js';
-import { Angles } from './angles.js';
-import { Order, Axis } from './order.js';
+const Vector = require('./vector.js');
+const Matrix = require('./matrix.js');
+const Angles = require('./angles.js');
+const {Order, Axis} = require('./order.js');
 
-export function getMatrixAxis(axis, angle) {
+function getMatrixAxis(axis, angle) {
     if (!(axis instanceof Axis.Direction)) {
         throw 'axis is not an Axis.Direction';
     }
@@ -13,7 +13,7 @@ export function getMatrixAxis(axis, angle) {
     return _getRotationMatrix(axis, angle);
 }
 
-export function getMatrixEuler(order, angles) {
+function getMatrixEuler(order, angles) {
     if (!(order instanceof Order)) {
         throw 'order is not an Order type';
     }
@@ -23,7 +23,7 @@ export function getMatrixEuler(order, angles) {
     return _getEulerMatrix(order, angles);
 }
 
-export function getMatrixFromTo(orderFrom, anglesFrom, orderTo, anglesTo) {
+function getMatrixFromTo(orderFrom, anglesFrom, orderTo, anglesTo) {
     if (!(orderFrom instanceof Order)) {
         throw 'orderFrom is not an Order type';
     }
@@ -40,7 +40,7 @@ export function getMatrixFromTo(orderFrom, anglesFrom, orderTo, anglesTo) {
     return _getMatrixFromTo(orderFrom, anglesFrom, orderTo, anglesTo);
 }
 
-export function rotateAxisTo(axis, angle, vector) {
+function rotateAxisTo(axis, angle, vector) {
     if (!(axis instanceof Axis.Direction)) {
         throw 'axis is not an Axis.Direction';
     }
@@ -55,7 +55,7 @@ export function rotateAxisTo(axis, angle, vector) {
     return vector.mult(mat);
 }
 
-export function rotateAxisFrom(axis, angle, vector) {
+function rotateAxisFrom(axis, angle, vector) {
     if (!(axis instanceof Axis.Direction)) {
         throw 'axis is not an Axis.Direction';
     }
@@ -70,7 +70,7 @@ export function rotateAxisFrom(axis, angle, vector) {
     return mat.mult(vector);
 }
 
-export function rotateEulerTo(order, angles, vector) {
+function rotateEulerTo(order, angles, vector) {
     if (!(order instanceof Order)) {
         throw 'order is not an Order';
     }
@@ -85,7 +85,7 @@ export function rotateEulerTo(order, angles, vector) {
     return vector.mult(mat);
 }
 
-export function rotateEulerFrom(order, angles, vector) {
+function rotateEulerFrom(order, angles, vector) {
     if (!(order instanceof Order)) {
         throw 'order is not an Order';
     }
@@ -100,7 +100,7 @@ export function rotateEulerFrom(order, angles, vector) {
     return mat.mult(vector);
 }
 
-export function rotateMatrixTo(matrix, vector) {
+function rotateMatrixTo(matrix, vector) {
     if (!(matrix instanceof Matrix)) {
         throw 'matrix is not a Matrix';
     }
@@ -111,7 +111,7 @@ export function rotateMatrixTo(matrix, vector) {
     return vector.mult(matrix);
 }
 
-export function rotateMatrixFrom(matrix, vector) {
+function rotateMatrixFrom(matrix, vector) {
     if (!(matrix instanceof Matrix)) {
         throw 'matrix is not a Matrix';
     }
@@ -122,7 +122,7 @@ export function rotateMatrixFrom(matrix, vector) {
     return matrix.mult(vector);
 }
 
-export function rotateOffsetTo(matrix, offset, vector) {
+function rotateOffsetTo(matrix, offset, vector) {
     if (!(matrix instanceof Matrix)) {
         throw 'matrix is not a Matrix';
     }
@@ -137,7 +137,7 @@ export function rotateOffsetTo(matrix, offset, vector) {
     return relativeVector.mult(matrix);
 }
 
-export function rotateOffsetFrom(matrix, offset, vector) {
+function rotateOffsetFrom(matrix, offset, vector) {
     if (!(matrix instanceof Matrix)) {
         throw 'matrix is not a Matrix';
     }
@@ -213,3 +213,7 @@ function _getMatrixFromTo(orderFrom, anglesFrom, orderTo, anglesTo) {
     __transposeInplace(to);
     return to.mult(from);
 }
+
+module.exports = { getMatrixAxis, getMatrixEuler, getMatrixFromTo, rotateAxisTo,
+    rotateAxisFrom, rotateEulerTo, rotateAxisFrom, rotateEulerTo, rotateEulerFrom,
+    rotateMatrixTo, rotateMatrixFrom, rotateOffsetTo, rotateOffsetFrom }

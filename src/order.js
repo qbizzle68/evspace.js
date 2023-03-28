@@ -1,4 +1,4 @@
-export default class Order {
+class Order {
     #first = Axis.X_AXIS;
     #second = Axis.Y_AXIS;
     #third = Axis.Z_AXIS;
@@ -40,7 +40,7 @@ export default class Order {
     }
 }
 
-export class Axis {
+class Axis {
     static Direction = class {
         #val
         constructor(val) {
@@ -71,15 +71,17 @@ export class Axis {
     static Z_AXIS = new this.Direction(2);
 }
 
-export const XYZ = new Order(Axis.X_AXIS, Axis.Y_AXIS, Axis.Z_AXIS);
-export const XZY = new Order(Axis.X_AXIS, Axis.Z_AXIS, Axis.Y_AXIS);
-export const YXZ = new Order(Axis.Y_AXIS, Axis.X_AXIS, Axis.Z_AXIS);
-export const YZX = new Order(Axis.Y_AXIS, Axis.Z_AXIS, Axis.X_AXIS);
-export const ZXY = new Order(Axis.Z_AXIS, Axis.X_AXIS, Axis.Y_AXIS);
-export const ZYX = new Order(Axis.Z_AXIS, Axis.Y_AXIS, Axis.X_AXIS);
-export const XYX = new Order(Axis.X_AXIS, Axis.Y_AXIS, Axis.X_AXIS);
-export const XZX = new Order(Axis.X_AXIS, Axis.Z_AXIS, Axis.X_AXIS);
-export const YXY = new Order(Axis.Y_AXIS, Axis.X_AXIS, Axis.Y_AXIS);
-export const YZY = new Order(Axis.Y_AXIS, Axis.Z_AXIS, Axis.Y_AXIS);
-export const ZXZ = new Order(Axis.Z_AXIS, Axis.X_AXIS, Axis.Z_AXIS);
-export const ZYZ = new Order(Axis.Z_AXIS, Axis.Y_AXIS, Axis.Z_AXIS);
+const XYZ = new Order(Axis.X_AXIS, Axis.Y_AXIS, Axis.Z_AXIS);
+const XZY = new Order(Axis.X_AXIS, Axis.Z_AXIS, Axis.Y_AXIS);
+const YXZ = new Order(Axis.Y_AXIS, Axis.X_AXIS, Axis.Z_AXIS);
+const YZX = new Order(Axis.Y_AXIS, Axis.Z_AXIS, Axis.X_AXIS);
+const ZXY = new Order(Axis.Z_AXIS, Axis.X_AXIS, Axis.Y_AXIS);
+const ZYX = new Order(Axis.Z_AXIS, Axis.Y_AXIS, Axis.X_AXIS);
+const XYX = new Order(Axis.X_AXIS, Axis.Y_AXIS, Axis.X_AXIS);
+const XZX = new Order(Axis.X_AXIS, Axis.Z_AXIS, Axis.X_AXIS);
+const YXY = new Order(Axis.Y_AXIS, Axis.X_AXIS, Axis.Y_AXIS);
+const YZY = new Order(Axis.Y_AXIS, Axis.Z_AXIS, Axis.Y_AXIS);
+const ZXZ = new Order(Axis.Z_AXIS, Axis.X_AXIS, Axis.Z_AXIS);
+const ZYZ = new Order(Axis.Z_AXIS, Axis.Y_AXIS, Axis.Z_AXIS);
+
+module.exports = { XYZ, XZY, YXZ, YZX, ZXY, ZYX, XYX, XZX, YXY, YZY, ZXZ, ZYZ };

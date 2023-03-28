@@ -1,4 +1,4 @@
-export default class Angles {
+class Angles {
     #alpha;
     #beta;
     #gamma;
@@ -70,3 +70,5 @@ export default class Angles {
         return `[ ${a}, ${b}, ${c} ]`;
     }
 }
+
+module.exports = Angles;

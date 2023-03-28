@@ -1,9 +1,9 @@
-import {Vector} from './vector.js';
-import { getMatrixEuler, rotateOffsetFrom, rotateOffsetTo } from './rotation';
-import Order from './order.js';
-import Angles from './angles.js';
+const Vector = require('./vector.js');
+const { getMatrixEuler, rotateOffsetFrom, rotateOffsetTo } = require('./rotation.js');
+const Order = require('./order.js');
+const Angles = require('./angles.js');
 
-export default class ReferenceFrame {
+class ReferenceFrame {
     #order;
     #angles;
     #matrix;
@@ -166,3 +166,5 @@ export default class ReferenceFrame {
     }
 
 }
+
+module.exports = ReferenceFrame;

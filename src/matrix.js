@@ -1,6 +1,6 @@
-import Vector from './vector.js';
+const Vector = require('./vector.js');
 
-export default class Matrix {
+class Matrix {
     #data = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
     constructor(arr) {
         if (typeof(arr) == 'undefined') {
@@ -221,3 +221,5 @@ export default class Matrix {
     }
 
 }
+
+module.exports = Matrix;
