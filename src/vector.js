@@ -1,19 +1,31 @@
 const Matrix = require('./matrix.js');
 
 class Vector {
-    #data = [0, 0, 0];
+    #data;
+
     constructor(x, y, z) {
-        if (isNaN(x)) {
+        if ((x||false) && isNaN(x)) {
             throw 'x component is not a number';
         }
-        if (isNaN(y)) {
+        if ((y||false) && isNaN(y)) {
             throw 'y component is not a number';
         }
-        if (isNaN(z)) {
+        if ((z||false) && isNaN(z)) {
             throw 'z component is not a number';
         }
 
         this.#data = [x, y, z];
+    }
+
+    [Symbol.iterator]() {
+        let _index = 0;
+        let _data = this.#data;
+
+        return {
+            next() {
+                return {value: _data[_index], done: !(_index++ in _data)};
+            }
+        };
     }
 
     add(rhs) {
@@ -25,7 +37,7 @@ class Vector {
                           this.#data[2] + rhs.#data[2]);
     }
 
-    sub(rhs) {
+    subtract(rhs) {
         if (!(rhs instanceof Vector)) {
             throw 'rhs is not a Vector';
         }
@@ -34,9 +46,9 @@ class Vector {
                           this.#data[2] - rhs.#data[2]);
     }
 
-    mult(rhs) {
+    multiply(rhs) {
         if (rhs instanceof Matrix) {
-            let rtn = Vector();
+            const rtn = Vector();
             for (let i = 0; i < 3; i++) {
                 let sum = 0;
                 for (let j = 0; j < 3; j++) {
@@ -45,7 +57,7 @@ class Vector {
                 rtn.#data[i];
             }
             return rtn;
-        } else if (rhs instanceof Number) {
+        } else if (!isNaN(rhs)) {
             return new Vector(this.#data[0] * rhs,
                               this.#data[1] * rhs,
                               this.#data[2] * rhs);
@@ -53,7 +65,7 @@ class Vector {
         throw 'rhs is not a number';
     }
 
-    div(rhs) {
+    divide(rhs) {
         if (isNaN(rhs)) {
             throw 'rhs is not a number';
         }
@@ -72,7 +84,7 @@ class Vector {
         return this;
     }
 
-    subEqual(rhs) {
+    subtractEqual(rhs) {
         if (!(rhs instanceof Vector)) {
             throw 'rhs is not a Vector';
         }
@@ -82,8 +94,8 @@ class Vector {
         return this;
     }
 
-    multEqual(rhs) {
-        if (rhs instanceof Number) {
+    multiplyEqual(rhs) {
+        if (!isNaN(rhs)) {
             this.#data[0] *= rhs;
             this.#data[1] *= rhs;
             this.#data[2] *= rhs;
@@ -102,13 +114,15 @@ class Vector {
         throw 'rhs is not a Number';
     }
 
-    divEqual(rhs) {
+    divideEqual(rhs) {
         if (isNaN(rhs)) {
             throw 'rhs is not a Number';
         }
+
         this.#data[0] /= rhs;
         this.#data[1] /= rhs;
         this.#data[2] /= rhs;
+
         return this;
     }
 
@@ -120,24 +134,24 @@ class Vector {
         if (isNaN(index)) {
             throw 'index is not a number';
         }
+
         return this.#data[index];
     }
 
     set(index, value) {
         if (isNaN(index)) {
             throw 'index is not a number';
-        }
-        if (isNaN(value)) {
+        } else if (isNaN(value)) {
             throw 'value is not a number';
+        } else if (index < 0 || index > 2) {
+            throw `index is out of bounds (index=${index})`;
         }
+
         this.#data[index] = value;
     }
 
     mag() {
-        const arg = this.#data[0] * this.#data[0]
-                  + this.#data[1] * this.#data[1]
-                  + this.#data[2] * this.#data[2];
-        return Math.sqrt(arg);
+        return Math.sqrt(this.mag2());
     }
 
     mag2() {
@@ -148,6 +162,7 @@ class Vector {
 
     normalize() {
         const mag = this.mag();
+
         this.#data[0] /= mag;
         this.#data[1] /= mag;
         this.#data[2] /= mag;
@@ -169,6 +184,10 @@ class Vector {
 
     toArray() {
         return Array.from(this.#data);
+    }
+
+    toObject() {
+        return { x: this.#data[0], y: this.#data[1], z: this.#data[2] };
     }
 
 }

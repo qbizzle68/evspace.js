@@ -1,20 +1,22 @@
 const Vector = require('./vector.js');
 
 class Matrix {
-    #data = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+    #data = Array(3).fill(new Array(3));
+
     constructor(arr) {
-        if (typeof(arr) == 'undefined') {
+        if (arr == undefined) {
+            this.#data = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
             return;
+        } else {
+            this.#data = [...Array(3)].map(e => Array(3));
         }
         if (arr.length != 3) {
-            throw 'arr must have length of 3';
+            throw 'arr must have 3 rows';
         }
         for (let i = 0; i < 3; i++) {
             if (arr[i].length != 3) {
-                throw `row ${i} must have length of 3`;
+                throw `row ${i} must have 3 columns`;
             }
-        }
-        for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
                 if (isNaN(arr[i][j])) {
                     throw `element [${i}][${j}] is not a number`;
@@ -22,7 +24,17 @@ class Matrix {
                 this.#data[i][j] = arr[i][j];
             }
         }
-        
+    }
+
+    [Symbol.iterator]() {
+        let _row = 0;
+        let _data = this.#data;
+
+        return {
+            next: function() {
+                return {value: _data[_row], done: !(_row++ in _data)}
+            }
+        }
     }
 
     add(rhs) {
@@ -38,7 +50,7 @@ class Matrix {
         return rtn;
     }
 
-    sub(rhs) {
+    subtract(rhs) {
         if (!(rhs instanceof Matrix)) {
             throw 'rhs is not a Matrix';
         }
@@ -50,7 +62,7 @@ class Matrix {
         }
     }
 
-    mult(rhs) {
+    multiply(rhs) {
         if (rhs instanceof Matrix) {
             let rtn = new Matrix();
             for (let i = 0; i < 3; i++) {
@@ -73,7 +85,7 @@ class Matrix {
                 rtn.set(i, sum);
             }
             return rtn;
-        } else if (rhs instanceof Number) {
+        } else if (!isNaN(rhs)) {
             let rtn = new Matrix();
             for (let i = 0; i < 3; i++) {
                 for (let j = 0; j < 3; j++) {
@@ -82,12 +94,12 @@ class Matrix {
             }
             return rtn;
         }
-        throw 'rhs is not a Matrix, Vector or Number';
+        throw 'rhs is not a Matrix, Vector or number';
     }
 
-    div(rhs) {
-        if (!(rhs instanceof Number)) {
-            throw 'rhs is not a Number';
+    divide(rhs) {
+        if (isNaN(rhs)) {
+            throw 'rhs is not a number';
         }
         let rtn = new Matrix();
         for (let i = 0; i < 3; i++) {
@@ -110,7 +122,7 @@ class Matrix {
         return this;
     }
 
-    subEqual(rhs) {
+    subtractEqual(rhs) {
         if (!(rhs instanceof Matrix)) {
             throw 'rhs is not a Matrix';
         }
@@ -122,7 +134,7 @@ class Matrix {
         return this;
     }
 
-    multEqual(rhs) {
+    multiplyEqual(rhs) {
         if (rhs instanceof Matrix) {
             let arr = JSON.parse(JSON.stringify(this.#data));
             for (let i = 0; i < 3; i++) {
@@ -135,7 +147,7 @@ class Matrix {
                 }
             }
             return this;
-        } else if (rhs instanceof Number) {
+        } else if (!isNaN(rhs)) {
             for (let i = 0; i < 3; i++) {
                 for (let j = 0; j < 3; j++) {
                     this.#data[i][j] *= rhs;
@@ -143,16 +155,16 @@ class Matrix {
             }
             return this;
         }
-        throw 'rhs is not a Matrix or Number';
+        throw 'rhs is not a Matrix or number';
     }
 
-    divEqual(rhs) {
-        if (!(rhs instanceof Matrix)) {
-            throw 'rhs is not a Matrix';
+    divideEqual(rhs) {
+        if (isNaN(rhs)) {
+            throw 'rhs is not a number';
         }
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
-                this.#data[i][j] /= rhs.#data[i][j];
+                this.#data[i][j] /= rhs;
             }
         }
         return this;
@@ -218,6 +230,12 @@ class Matrix {
 
     toArray() {
         return JSON.parse(JSON.stringify(this.#data));
+    }
+
+    toObject() {
+        return {row0: {col0: this.#data[0][0], col1: this.#data[0][1], col2: this.#data[0][2]},
+                row1: {col0: this.#data[1][0], col1: this.#data[1][1], col2: this.#data[1][2]},
+                row2: {col0: this.#data[2][0], col1: this.#data[2][1], col2: this.#data[2][2]}};
     }
 
 }
