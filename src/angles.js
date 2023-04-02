@@ -75,4 +75,4 @@ class Angles {
     }
 }
 
-module.exports = Angles;
+module.exports.Angles = Angles;

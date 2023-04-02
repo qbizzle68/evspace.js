@@ -167,4 +167,4 @@ class ReferenceFrame {
 
 }
 
-module.exports = ReferenceFrame;
+module.exports.ReferenceFrame = ReferenceFrame;

@@ -49,6 +49,10 @@ class Order {
 
         return `[${first}, ${second}, ${third}]`;
     }
+
+    toObject() {
+        return {first: this.#first.value(), second: this.#second.value(), third: this.#third.value()};
+    }
 }
 
 class Axis {
@@ -62,6 +66,10 @@ class Axis {
                 throw RangeError(`axis direction is out of bounds (val = ${val})`);
             }
             this.#val = val;
+        }
+
+        value() {
+            return this.#val;
         }
 
         toString() {
@@ -95,5 +103,17 @@ const YZY = new Order(Axis.Y_AXIS, Axis.Z_AXIS, Axis.Y_AXIS);
 const ZXZ = new Order(Axis.Z_AXIS, Axis.X_AXIS, Axis.Z_AXIS);
 const ZYZ = new Order(Axis.Z_AXIS, Axis.Y_AXIS, Axis.Z_AXIS);
 
-module.exports = { Order, Axis, XYZ, XZY, YXZ, YZX, ZXY, ZYX,
-                   XYX, XZX, YXY, YZY, ZXZ, ZYZ };
+module.exports.Order = Order;
+module.exports.Axis = Axis;
+module.exports.XYZ = XYZ;
+module.exports.XZY = XZY;
+module.exports.YXZ = YXZ;
+module.exports.YZX = YZX;
+module.exports.ZXY = ZXY;
+module.exports.ZYX = ZYX;
+module.exports.XYX = XYX;
+module.exports.XZX = XZX;
+module.exports.YXY = YXY;
+module.exports.YZY = YZY;
+module.exports.ZXZ = ZXZ;
+module.exports.ZYZ = ZYZ;
