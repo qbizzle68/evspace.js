@@ -1,6 +1,5 @@
-const Vector = require('./vector.js');
-const Matrix = require('./matrix.js');
-const Angles = require('./angles.js');
+const {Vector, Matrix} = require('./types.js');
+const {Angles} = require('./angles.js');
 const {Order, Axis} = require('./order.js');
 
 function getMatrixAxis(axis, angle) {
@@ -52,7 +51,7 @@ function rotateAxisTo(axis, angle, vector) {
     }
 
     const mat = _getRotationMatrix(axis, angle);
-    return vector.mult(mat);
+    return vector.multiply(mat);
 }
 
 function rotateAxisFrom(axis, angle, vector) {
@@ -67,7 +66,7 @@ function rotateAxisFrom(axis, angle, vector) {
     }
 
     const mat = _getRotationMatrix(axis, angle);
-    return mat.mult(vector);
+    return mat.multiply(vector);
 }
 
 function rotateEulerTo(order, angles, vector) {
@@ -82,7 +81,7 @@ function rotateEulerTo(order, angles, vector) {
     }
 
     const mat = _getEulerMatrix(order, angles);
-    return vector.mult(mat);
+    return vector.multiply(mat);
 }
 
 function rotateEulerFrom(order, angles, vector) {
@@ -97,7 +96,7 @@ function rotateEulerFrom(order, angles, vector) {
     }
 
     const mat = _getEulerMatrix(order, angles);
-    return mat.mult(vector);
+    return mat.multiply(vector);
 }
 
 function rotateMatrixTo(matrix, vector) {
@@ -108,7 +107,7 @@ function rotateMatrixTo(matrix, vector) {
         throw 'vector is not a Vector';
     }
 
-    return vector.mult(matrix);
+    return vector.multiply(matrix);
 }
 
 function rotateMatrixFrom(matrix, vector) {
@@ -119,7 +118,7 @@ function rotateMatrixFrom(matrix, vector) {
         throw 'vector is not a Vector';
     }
 
-    return matrix.mult(vector);
+    return matrix.multiply(vector);
 }
 
 function rotateOffsetTo(matrix, offset, vector) {
@@ -133,8 +132,8 @@ function rotateOffsetTo(matrix, offset, vector) {
         throw 'vector is not a Vector';
     }
 
-    const relativeVector = vector.sub(offset);
-    return relativeVector.mult(matrix);
+    const relativeVector = vector.subtract(offset);
+    return relativeVector.multiply(matrix);
 }
 
 function rotateOffsetFrom(matrix, offset, vector) {
@@ -148,7 +147,7 @@ function rotateOffsetFrom(matrix, offset, vector) {
         throw 'vector is not a Vector';
     }
 
-    const rotatedVector = matrix.mult(vector);
+    const rotatedVector = matrix.multiply(vector);
     return rotatedVector.add(offset);
 }
 
@@ -156,21 +155,21 @@ function _getXRotation(angle) {
     const cAngle = Math.cos(angle);
     const sAngle = Math.sin(angle);
 
-    return [[1, 0, 0], [0, cAngle, -sAngle], [0, sAngle, cAngle]];
+    return new Matrix([[1, 0, 0], [0, cAngle, -sAngle], [0, sAngle, cAngle]]);
 }
 
 function _getYRotation(angle) {
     const cAngle = Math.cos(angle);
     const sAngle = Math.sin(angle);
 
-    return [[cAngle, 0, sAngle], [0, 1, 0], [-sAngle, 0, cAngle]];
+    return new Matrix([[cAngle, 0, sAngle], [0, 1, 0], [-sAngle, 0, cAngle]]);
 }
 
 function _getZRotation(angle) {
     const cAngle = Math.cos(angle);
     const sAngle = Math.sin(angle);
 
-    return [[cAngle, -sAngle, 0], [sAngle, cAngle, 0], [0, 0, 1]];
+    return new Matrix([[cAngle, -sAngle, 0], [sAngle, cAngle, 0], [0, 0, 1]]);
 }
 
 function _getRotationMatrix(axis, angle) {
@@ -191,19 +190,19 @@ function _getRotationMatrix(axis, angle) {
 function _getEulerMatrix(order, angles) {
     let ans = _getRotationMatrix(order.first, angles.alpha);
 
-    ans.multEqual(_getRotationMatrix(order.second, angles.beta));
-    ans.multEqual(_getRotationMatrix(order.third, angles.gamma));
+    ans.multiplyEqual(_getRotationMatrix(order.second, angles.beta));
+    ans.multiplyEqual(_getRotationMatrix(order.third, angles.gamma));
     return ans;
 }
 
 function __transposeInplace(mat) {
-    const tmp = [mat[0][1], mat[0][2], mat[1][2]];
-    mat[0][1] = mat[1][0];
-    mat[0][2] = mat[2][0];
-    mat[1][2] = mat[2][1];
-    mat[1][0] = tmp[0];
-    mat[2][0] = tmp[1];
-    mat[2][1] = tmp[2];
+    const tmp = [mat.get(0, 1), mat.get(0, 2), mat.get(1, 2)];
+    mat.set(0, 1, mat.get(1, 0));
+    mat.set(0, 2, mat.get(2, 0));
+    mat.set(1, 2, mat.get(2, 1));
+    mat.set(1, 0, tmp[0]);
+    mat.set(2, 0, tmp[1]);
+    mat.set(2, 1, tmp[2]);
 }
 
 function _getMatrixFromTo(orderFrom, anglesFrom, orderTo, anglesTo) {
@@ -211,9 +210,21 @@ function _getMatrixFromTo(orderFrom, anglesFrom, orderTo, anglesTo) {
     const to = _getEulerMatrix(orderTo, anglesTo);
     
     __transposeInplace(to);
-    return to.mult(from);
+    return to.multiply(from);
 }
 
-module.exports = { getMatrixAxis, getMatrixEuler, getMatrixFromTo, rotateAxisTo,
-    rotateAxisFrom, rotateEulerTo, rotateAxisFrom, rotateEulerTo, rotateEulerFrom,
-    rotateMatrixTo, rotateMatrixFrom, rotateOffsetTo, rotateOffsetFrom }
+module.exports.getMatrixAxis = getMatrixAxis
+module.exports.getMatrixEuler = getMatrixEuler
+module.exports.getMatrixFromTo = getMatrixFromTo
+module.exports.rotateAxisTo = rotateAxisTo
+module.exports.rotateAxisFrom = rotateAxisFrom
+module.exports.rotateEulerTo = rotateEulerTo
+module.exports.rotateEulerFrom = rotateEulerFrom
+module.exports.rotateMatrixTo = rotateMatrixTo
+module.exports.rotateMatrixFrom = rotateMatrixFrom
+module.exports.rotateOffsetTo = rotateOffsetTo
+module.exports.rotateOffsetFrom = rotateOffsetFrom
+
+// module.exports = { getMatrixAxis, getMatrixEuler, getMatrixFromTo, rotateAxisTo,
+//     rotateAxisFrom, rotateEulerTo, rotateAxisFrom, rotateEulerTo, rotateEulerFrom,
+//     rotateMatrixTo, rotateMatrixFrom, rotateOffsetTo, rotateOffsetFrom }

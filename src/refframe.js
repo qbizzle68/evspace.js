@@ -1,7 +1,7 @@
-const Vector = require('./vector.js');
+const { Vector } = require('./types.js');
 const { getMatrixEuler, rotateOffsetFrom, rotateOffsetTo } = require('./rotation.js');
-const Order = require('./order.js');
-const Angles = require('./angles.js');
+const { Order } = require('./order.js');
+const { Angles } = require('./angles.js');
 
 class ReferenceFrame {
     #order;
@@ -97,7 +97,7 @@ class ReferenceFrame {
         }
 
         if (this.#offset == '') {
-            return vector.mult(this.#matrix);
+            return vector.multiply(this.#matrix);
         }
         else {
             return rotateOffsetTo(this.#matrix, this.#offset, vector);
@@ -110,7 +110,7 @@ class ReferenceFrame {
         }
 
         if (this.#offset == '') {
-            return this.#matrix.mult(vector);
+            return this.#matrix.multiply(vector);
         }
         else {
             return rotateOffsetFrom(this.#matrix, this.#offset, vector);
@@ -127,17 +127,17 @@ class ReferenceFrame {
 
         let tmp;
         if (this.#offset == '') {
-            tmp = this.#matrix.mult(vector);
+            tmp = this.#matrix.multiply(vector);
         }
         else {
             tmp = rotateOffsetFrom(this.#matrix, this.#offset, vector);
         }
 
         if (frame.#offset == '') {
-            return tmp.mult(this.#matrix);
+            return tmp.multiply(this.#matrix);
         }
         else {
-            return rotateOffsetTo(frame.#matrix, from.#offset, tmp);
+            return rotateOffsetTo(frame.#matrix, frame.#offset, tmp);
         }
     }
 
@@ -151,14 +151,14 @@ class ReferenceFrame {
 
         let tmp;
         if (this.#offset == '') {
-            tmp = frame.#matrix.mult(vector);
+            tmp = frame.#matrix.multiply(vector);
         }
         else {
             tmp = rotateOffsetFrom(frame.#matrix, frame.#offset, vector)
         }
 
         if (frame.#offset == '') {
-            return this.#matrix.mult(tmp);
+            return this.#matrix.multiply(tmp);
         }
         else {
             return rotateOffsetTo(this.#matrix, this.#offset, tmp);
