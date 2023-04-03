@@ -82,8 +82,7 @@ class Axis {
             else if (this.#val == 1) {
                 return 'Y_AXIS';
             }
-            else {
-            // else if (this.#val == 2) {
+            else if (this.#val == 2) {
                 return 'Z_AXIS';
             }
         }

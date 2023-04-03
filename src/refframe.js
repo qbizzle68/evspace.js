@@ -10,13 +10,13 @@ class ReferenceFrame {
     #offset;
     constructor(order, angles, offset='') {
         if (!(order instanceof Order)) {
-            throw 'order is not an Order';
+            throw TypeError('order is not an Order');
         }
         if (!(angles instanceof Angles)) {
-            throw 'angles is not an Angles';
+            throw TypeError('angles is not an Angles');
         }
         if (offset != '' && !(offset instanceof Vector)) {
-            throw 'offset is not a Vector';
+            throw TypeError('offset is not a Vector');
         }
 
         this.#order = order;
@@ -49,7 +49,7 @@ class ReferenceFrame {
 
     set angles(angs) {
         if (!(angs instanceof Angles)) {
-            throw 'angs is not an Angles';
+            throw TypeError('angs is not an Angles');
         }
 
         this.#angles = angs;
@@ -58,7 +58,7 @@ class ReferenceFrame {
 
     set alpha(angle) {
         if (isNaN(angle)) {
-            throw 'angle is not a number';
+            throw TypeError('angle is not a number');
         }
 
         this.#angles.alpha = angle;
@@ -67,7 +67,7 @@ class ReferenceFrame {
 
     set beta(angle) {
         if (isNaN(angle)) {
-            throw 'angle is not a number';
+            throw TypeError('angle is not a number');
         }
 
         this.#angles.beta = angle;
@@ -76,7 +76,7 @@ class ReferenceFrame {
 
     set gamma(angle) {
         if (isNaN(angle)) {
-            throw 'angle is not a number';
+            throw TypeError('angle is not a number');
         }
 
         this.#angles.gamma = angle;
@@ -85,7 +85,7 @@ class ReferenceFrame {
 
     set offset(vec) {
         if (!(vec instanceof Vector)) {
-            throw 'vec is not a Vector';
+            throw TypeError('vec is not a Vector');
         }
 
         this.#offset = vec;
@@ -93,7 +93,7 @@ class ReferenceFrame {
 
     rotateTo(vector) {
         if (!(vector instanceof Vector)) {
-            throw 'vector is not a Vector';
+            throw TypeError('vector is not a Vector');
         }
 
         if (this.#offset == '') {
@@ -106,7 +106,7 @@ class ReferenceFrame {
 
     rotateFrom(vector) {
         if (!(vector instanceof Vector)) {
-            throw 'vector is not a Vector';
+            throw TypeError('vector is not a Vector');
         }
 
         if (this.#offset == '') {
@@ -119,10 +119,10 @@ class ReferenceFrame {
 
     rotateToFrame(frame, vector) {
         if (!(frame instanceof ReferenceFrame)) {
-            throw 'frame is not a ReferenceFrame';
+            throw TypeError('frame is not a ReferenceFrame');
         }
         if (!(vector instanceof Vector)) {
-            throw 'vector is not a Vector';
+            throw TypeError('vector is not a Vector');
         }
 
         let tmp;
@@ -134,7 +134,7 @@ class ReferenceFrame {
         }
 
         if (frame.#offset == '') {
-            return tmp.multiply(this.#matrix);
+            return tmp.multiply(frame.#matrix);
         }
         else {
             return rotateOffsetTo(frame.#matrix, frame.#offset, tmp);
@@ -143,22 +143,22 @@ class ReferenceFrame {
 
     rotateFromFrame(frame, vector) {
         if (!(frame instanceof ReferenceFrame)) {
-            throw 'frame is not a ReferenceFrame';
+            throw TypeError('frame is not a ReferenceFrame');
         }
         if (!(vector instanceof Vector)) {
-            throw 'vector is not a Vector';
+            throw TypeError('vector is not a Vector');
         }
 
         let tmp;
-        if (this.#offset == '') {
+        if (frame.#offset == '') {
             tmp = frame.#matrix.multiply(vector);
         }
         else {
             tmp = rotateOffsetFrom(frame.#matrix, frame.#offset, vector)
         }
 
-        if (frame.#offset == '') {
-            return this.#matrix.multiply(tmp);
+        if (this.#offset == '') {
+            return tmp.multiply(this.#matrix);
         }
         else {
             return rotateOffsetTo(this.#matrix, this.#offset, tmp);

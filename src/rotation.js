@@ -179,8 +179,7 @@ function _getRotationMatrix(axis, angle) {
     else if (axis == Axis.Y_AXIS) {
         return _getYRotation(angle);
     }
-    else {
-    // else if (axis == Axis.Z_AXIS) {
+    else if (axis == Axis.Z_AXIS) {
         return _getZRotation(angle);
     }
 }

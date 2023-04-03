@@ -2,7 +2,7 @@ import json
 
 import pyevspace as evs
 
-from math import sin, cos, pi
+from math import pi
 
 answers = {}
 
@@ -80,13 +80,105 @@ rotation_from_to_answers = {
     } for orderFrom in orders
 }
 
-rotation_refframe_from_to_offset_answers = {
-    toString(orderFrom): {
-        toString(orderTo): {
-            toString(axes[i]): toList(evs.rotateOffsetTo(evs.getMatrixEuler(orderTo, angs90), offset, evs.rotateMatrixFrom(evs.getMatrixEuler(orderFrom, angs90), vectors[i]))) for i in range(3)
-        } for orderTo in orders
-    } for orderFrom in orders
+# from ref frame to offset ref frame
+rotation_ref_to_ref_offset = {
+    toString(order1): {
+        toString(order2): {
+            toString(axes[i]):
+                toList(evs.ReferenceFrame(order1, angs90).rotateToFrame(evs.ReferenceFrame(order2, angs90, offset=offset), vectors[i])) for i in range(3)
+        } for order2 in orders
+    } for order1 in orders
 }
+
+# from ref frame from offset ref frame
+rotation_ref_from_ref_offset = {
+    toString(order1): {
+        toString(order2): {
+            toString(axes[i]):
+                toList(evs.ReferenceFrame(order1, angs90).rotateFromFrame(evs.ReferenceFrame(order2, angs90, offset=offset), vectors[i])) for i in range(3)
+        } for order2 in orders
+    } for order1 in orders
+}
+
+# from ref frame offset to ref frame non-offset
+rotation_ref_offset_to_ref = {
+    toString(order1): {
+        toString(order2): {
+            toString(axes[i]):
+                toList(evs.ReferenceFrame(order1, angs90, offset=offset).rotateToFrame(evs.ReferenceFrame(order2, angs90), vectors[i])) for i in range(3)
+        } for order2 in orders
+    } for order1 in orders
+}
+
+# from ref frame offset from ref frame non-offset
+rotation_ref_offset_from_ref = {
+    toString(order1): {
+        toString(order2): {
+            toString(axes[i]):
+                toList(evs.ReferenceFrame(order1, angs90, offset=offset).rotateFromFrame(evs.ReferenceFrame(order2, angs90), vectors[i])) for i in range(3)
+        } for order2 in orders
+    } for order1 in orders
+}
+
+# from ref frame to ref frame
+rotation_ref_to_ref = {
+    toString(order1): {
+        toString(order2): {
+            toString(axes[i]):
+                toList(evs.ReferenceFrame(order1, angs90).rotateToFrame(evs.ReferenceFrame(order2, angs90), vectors[i])) for i in range(3)
+        } for order2 in orders
+    } for order1 in orders
+}
+
+# from ref frame from ref frame
+rotation_ref_from_ref = {
+    toString(order1): {
+        toString(order2): {
+            toString(axes[i]):
+                toList(evs.ReferenceFrame(order1, angs90).rotateFromFrame(evs.ReferenceFrame(order2, angs90), vectors[i])) for i in range(3)
+        } for order2 in orders
+    } for order1 in orders
+}
+
+# from offset reference frame to non-offset reference frame
+rotation_ref_offset_to_ref = {
+    toString(order1): {
+        toString(order2): {
+            toString(axes[i]):
+                toList(evs.ReferenceFrame(order1, angs90, offset=offset).rotateToFrame(evs.ReferenceFrame(order2, angs90), vectors[i])) for i in range(3)
+        } for order2 in orders
+    } for order1 in orders
+}
+
+# from offset reference frame from non-offset reference frame
+rotation_ref_offset_from_ref = {
+    toString(order1): {
+        toString(order2): {
+            toString(axes[i]):
+                toList(evs.ReferenceFrame(order1, angs90, offset=offset).rotateFromFrame(evs.ReferenceFrame(order2, angs90), vectors[i])) for i in range(3)
+        } for order2 in orders
+    } for order1 in orders
+}
+
+offset2 = evs.Vector(-1, -1, -1)
+rotation_ref_offset_to_offset = {
+    toString(order1): {
+        toString(order2): {
+            toString(axes[i]):
+                toList(evs.ReferenceFrame(order1, angs90, offset=offset).rotateToFrame(evs.ReferenceFrame(order2, angs90, offset=offset2), vectors[i])) for i in range(3)
+        } for order2 in orders
+    } for order1 in orders
+}
+
+rotation_ref_offset_from_offset = {
+    toString(order1): {
+        toString(order2): {
+            toString(axes[i]):
+                toList(evs.ReferenceFrame(order1, angs90, offset=offset).rotateFromFrame(evs.ReferenceFrame(order2, angs90, offset=offset2), vectors[i])) for i in range(3)
+        } for order2 in orders
+    } for order1 in orders
+}
+
 
 answers['rotation_matrix'] = rotation_matrix_answers
 answers['rotation_euler'] = rotation_euler_answers
@@ -97,7 +189,15 @@ answers['rotation_euler_from'] = rotation_euler_from_answers
 answers['rotation_offset_to'] = rotation_offset_to_answers
 answers['rotation_offset_from'] = rotation_offset_from_answers
 answers['rotation_from_to'] = rotation_from_to_answers
-answers['rotation_refframe_from_to_offset'] = rotation_refframe_from_to_offset_answers
+answers['rotation_ref_to_ref'] = rotation_ref_to_ref
+answers['rotation_ref_from_ref'] = rotation_ref_from_ref
+answers['rotation_ref_to_ref_offset'] = rotation_ref_to_ref_offset
+answers['rotation_ref_from_ref_offset'] = rotation_ref_from_ref_offset
+answers['rotation_ref_offset_to_ref'] = rotation_ref_offset_to_ref
+answers['rotation_ref_offset_from_ref'] = rotation_ref_offset_from_ref
+answers['rotation_ref_offset_to_offset'] = rotation_ref_offset_to_offset
+answers['rotation_ref_offset_from_offset'] = rotation_ref_offset_from_offset
+# answers['rotation_refframe_from_to_offset'] = rotation_refframe_from_to_offset_answers
 
 if __name__ == '__main__':
     print(json.dumps(answers))
