@@ -21,8 +21,6 @@ def toList(obj):
 
 def toString(obj):
     if isinstance(obj, evs.Order):
-        # orderStr = str(obj)
-        # return f'{orderStr[1]}{orderStr[9]}{orderStr[17]}'
         return str(obj)
     elif obj is evs.X_AXIS:
         return 'X_AXIS'
@@ -89,48 +87,6 @@ rotation_refframe_from_to_offset_answers = {
         } for orderTo in orders
     } for orderFrom in orders
 }
-
-# def make_dict2(orderFrom, offset):
-#     rtnDict = {}
-#     # angs90 = Angles(pi/2, pi/2, pi/2)
-#     matFrom = evs.getMatrixEuler(orderFrom, angs90)
-#     for orderTo in orders:
-#         matTo = evs.getMatrixEuler(orderTo, angs90)
-#         axisDict = {}
-#         for i in range(3):
-#             tmp = evs.rotateMatrixFrom(matFrom, vectors[i])
-#             axisDict[toString(i)] = toList(evs.rotateOffsetTo(matTo, offset, tmp))
-#         rtnDict[toString(orderTo)] = axisDict
-#     return rtnDict
-
-# offset = evs.Vector(1, 1, 1)
-# rotation_refframe_from_XYZ_to_offset = make_dict2(evs.XYZ, offset)
-# rotation_refframe_from_XZY_to_offset = make_dict2(evs.XZY, offset)
-# rotation_refframe_from_YXZ_to_offset = make_dict2(evs.YXZ, offset)
-# rotation_refframe_from_YZX_to_offset = make_dict2(evs.YZX, offset)
-# rotation_refframe_from_ZXY_to_offset = make_dict2(evs.ZXY, offset)
-# rotation_refframe_from_ZYX_to_offset = make_dict2(evs.ZYX, offset)
-# rotation_refframe_from_XYX_to_offset = make_dict2(evs.XYX, offset)
-# rotation_refframe_from_XZX_to_offset = make_dict2(evs.XZX, offset)
-# rotation_refframe_from_YXY_to_offset = make_dict2(evs.YXY, offset)
-# rotation_refframe_from_YZY_to_offset = make_dict2(evs.YZY, offset)
-# rotation_refframe_from_ZXZ_to_offset = make_dict2(evs.ZXZ, offset)
-# rotation_refframe_from_ZYZ_to_offset = make_dict2(evs.ZYZ, offset)
-
-# rotation_refframe_from_to_offset_answers = {
-#     toString(evs.XYZ): rotation_refframe_from_XYZ_to_offset,
-#     toString(evs.XZY): rotation_refframe_from_XZY_to_offset,
-#     toString(evs.YXZ): rotation_refframe_from_YXZ_to_offset,
-#     toString(evs.YZX): rotation_refframe_from_YZX_to_offset,
-#     toString(evs.ZXY): rotation_refframe_from_ZXY_to_offset,
-#     toString(evs.ZYX): rotation_refframe_from_ZYX_to_offset,
-#     toString(evs.XYX): rotation_refframe_from_XYX_to_offset,
-#     toString(evs.XZX): rotation_refframe_from_XZX_to_offset,
-#     toString(evs.YXY): rotation_refframe_from_YXY_to_offset,
-#     toString(evs.YZY): rotation_refframe_from_YZY_to_offset,
-#     toString(evs.ZXZ): rotation_refframe_from_ZXZ_to_offset,
-#     toString(evs.ZYZ): rotation_refframe_from_ZYZ_to_offset
-# }
 
 answers['rotation_matrix'] = rotation_matrix_answers
 answers['rotation_euler'] = rotation_euler_answers

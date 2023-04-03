@@ -35,11 +35,14 @@ class Order {
         if (isNaN(index)) {
             throw TypeError('index is not a number');
         }
-        if (index < 0 || index > 2) {
-            throw RangeError(`index is out of range (index = ${index})`);
+        if (index == 0) {
+            return this.#first;
+        } else if (index == 1) {
+            return this.#second;
+        } else if (index == 2) {
+            return this.#third;
         }
-
-        return [this.#first, this.#second, this.#third][index];
+        throw RangeError(`index is out of range (index = ${index})`);
     }
 
     toString() {
@@ -79,7 +82,8 @@ class Axis {
             else if (this.#val == 1) {
                 return 'Y_AXIS';
             }
-            else if (this.#val == 2) {
+            else {
+            // else if (this.#val == 2) {
                 return 'Z_AXIS';
             }
         }

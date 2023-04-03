@@ -5,13 +5,13 @@ class Angles {
 
     constructor(alpha, beta, gamma) {
         if (isNaN(alpha)) {
-            throw 'alpha is not a number';
+            throw TypeError('alpha is not a number');
         }
         if (isNaN(beta)) {
-            throw 'beta is not a number';
+            throw TypeError('beta is not a number');
         }
         if (isNaN(gamma)) {
-            throw 'gamma is not a number';
+            throw TypeError('gamma is not a number');
         }
 
         this.#alpha = alpha;
@@ -33,7 +33,7 @@ class Angles {
 
     set alpha(val) {
         if (isNaN(val)) {
-            throw 'value is not a number';
+            throw TypeError('value is not a number');
         }
 
         this.#alpha = val;
@@ -41,7 +41,7 @@ class Angles {
 
     set beta(val) {
         if (isNaN(val)) {
-            throw 'value is not a number';
+            throw TypeError('value is not a number');
         }
 
         this.#beta = val;
@@ -49,7 +49,7 @@ class Angles {
 
     set gamma(val) {
         if (isNaN(val)) {
-            throw 'value is not a number';
+            throw TypeError('value is not a number');
         }
         
         this.#gamma = val;
@@ -72,6 +72,10 @@ class Angles {
             c = c.toFixed(places);
         }
         return `[ ${a}, ${b}, ${c} ]`;
+    }
+
+    toObject() {
+        return {alpha: this.#alpha, beta: this.#beta, gamma: this.#gamma};
     }
 }
 

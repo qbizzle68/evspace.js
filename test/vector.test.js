@@ -173,15 +173,10 @@ test('set operator', () => {
     vec1.set(2, 21);
     expect(vec1).toStrictEqual(new Vector(68, 42, 21));
 
-    function failSet() {
-        vec1.set(failIndex, failValue);
-    }
-    let failIndex = 0, failValue = 'a';
-    expect(failSet).toThrow(TypeError);
-    failIndex = -1, failValue = 1;
-    expect(failSet).toThrow(RangeError);
-    failIndex = 3;
-    expect(failSet).toThrow(RangeError);
+    expect(() => {vec1.set(0, 'a');}).toThrow(TypeError);
+    expect(() => {vec1.set('j', 2);}).toThrow(TypeError);
+    expect(() => {vec1.set(-1, 0);}).toThrow(RangeError);
+    expect(() => {vec1.set(4, 0);}).toThrow(RangeError);
 });
 
 test('magnitude test', () => {
@@ -215,4 +210,10 @@ test('toArray test', () => {
 test('toObject test', () => {
     let vec = new Vector(1, 2, 3);
     expect(vec.toObject()).toStrictEqual({x: 1, y: 2, z: 3});
-})
+});
+
+test('toString test', () => {
+    let vec = new Vector(1.23456789, 1.23456789, 1.23456789);
+    expect(vec.toString()).toBe('[ 1.23456789, 1.23456789, 1.23456789 ]');
+    expect(vec.toString(3)).toBe('[ 1.235, 1.235, 1.235 ]');
+});

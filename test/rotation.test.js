@@ -6,10 +6,8 @@ const { Order, Axis, XYZ, XZY, YXZ, YZX, ZXY, ZYX,
 const { getMatrixAxis, getMatrixEuler, getMatrixFromTo, rotateAxisTo,
         rotateAxisFrom, rotateEulerTo, rotateEulerFrom,
         rotateMatrixTo, rotateMatrixFrom, rotateOffsetTo, rotateOffsetFrom } = require('../src/rotation');
-const { ReferenceFrame } = require('../src/refframe.js');
 
-const PIO4 = Math.PI / 4;
-
+        
 function getCloseMatrix(mat) {
     rtn = [...Array(3)].map(e => Array(3));
     for (let i = 0; i < 3; i++) {
@@ -27,8 +25,14 @@ function getCloseVector(vec) {
     }
     return rtn;
 }
-
+        
+const PIO4 = Math.PI / 4;
 const axes = [Axis.X_AXIS, Axis.Y_AXIS, Axis.Z_AXIS];
+const orders = [XYZ, XZY, YXZ, YZX, ZXY, ZYX, XYX, XZX, YXY, YZY, ZXZ, ZYZ]
+const PIO2 = Math.PI / 2;
+const offset = new Vector(1, 1, 1);
+const angs90 = new Angles(PIO2, PIO2, PIO2);
+const vectors = [new Vector(1, 0, 0), new Vector(0, 1, 0), new Vector(0, 0, 1)];
 
 test('axis rotation matrices', () => {
     for (let axis of axes) {
@@ -40,9 +44,6 @@ test('axis rotation matrices', () => {
     }
 });
 
-const orders = [XYZ, XZY, YXZ, YZX, ZXY, ZYX, XYX, XZX, YXY, YZY, ZXZ, ZYZ]
-const PIO2 = Math.PI / 2;
-
 test('euler rotation matrices', () => {
     for (let o of orders) {
         for (let i = 0; i < 8; i++) {
@@ -53,7 +54,18 @@ test('euler rotation matrices', () => {
     }
 });
 
-const vectors = [new Vector(1, 0, 0), new Vector(0, 1, 0), new Vector(0, 0, 1)];
+test('get matrix exceptions', () => {
+    expect(() => {getMatrixAxis(5, 1);}).toThrow(TypeError);
+    expect(() => {getMatrixAxis(Axis.X_AXIS, 'a');}).toThrow(TypeError);
+
+    expect(() => {getMatrixEuler(2.1, angs90);}).toThrow(TypeError);
+    expect(() => {getMatrixEuler(XYZ, 'abc');}).toThrow(TypeError);
+
+    expect(() => {getMatrixFromTo(0, angs90, XYZ, angs90);}).toThrow(TypeError);
+    expect(() => {getMatrixFromTo(XYZ, 'a', ZYX, angs90);}).toThrow(TypeError);
+    expect(() => {getMatrixFromTo(XYZ, angs90, {}, angs90);}).toThrow(TypeError);
+    expect(() => {getMatrixFromTo(XYZ, angs90, XYZ, 4.2);}).toThrow(TypeError);
+});
 
 test('axis to rotation', () => {
     for (let axis of axes) {
@@ -75,7 +87,15 @@ test('axis from rotation', () => {
     }
 });
 
-const angs90 = new Angles(PIO2, PIO2, PIO2);
+test('rotate axis expections', () => {
+    expect(() => {rotateAxisTo(0, 1, offset);}).toThrow(TypeError);
+    expect(() => {rotateAxisTo(Axis.X_AXIS, 'a', offset);}).toThrow(TypeError);
+    expect(() => {rotateAxisTo(Axis.X_AXIS, 2, {});}).toThrow(TypeError);
+
+    expect(() => {rotateAxisFrom(0, 1, offset);}).toThrow(TypeError);
+    expect(() => {rotateAxisFrom(Axis.X_AXIS, 'a', offset);}).toThrow(TypeError);
+    expect(() => {rotateAxisFrom(Axis.X_AXIS, 2, {});}).toThrow(TypeError);
+});
 
 test('euler to rotation', () => {
     for (let order of orders) {
@@ -87,7 +107,7 @@ test('euler to rotation', () => {
     }
 });
 
-test('euler to rotation', () => {
+test('euler from rotation', () => {
     for (let order of orders) {
         for (let i = 0; i < 3; i++) {
             const ans = getCloseVector(answers.rotation_euler_from[order][axes[i]]);
@@ -97,7 +117,45 @@ test('euler to rotation', () => {
     }
 });
 
-const offset = new Vector(1, 1, 1);
+test('rotate euler exceptions', () => {
+    expect(() => {rotateEulerTo(1, angs90, offset);}).toThrow(TypeError);
+    expect(() => {rotateEulerTo(XYZ, 'abd', offset);}).toThrow(TypeError);
+    expect(() => {rotateEulerTo(XYZ, angs90, new Matrix());}).toThrow(TypeError);
+
+    expect(() => {rotateEulerFrom('a', angs90, offset);}).toThrow(TypeError);
+    expect(() => {rotateEulerFrom(XYZ, {}, offset);}).toThrow(TypeError);
+    expect(() => {rotateEulerFrom(XYZ, angs90, 3.14);}).toThrow(TypeError);
+});
+
+test('rotation matrix to', () => {
+    for (let order of orders) {
+        for (let i = 0; i < 3; i++) {
+            const ans = getCloseVector(answers.rotation_euler_to[order][axes[i]]);
+            const mat = getMatrixEuler(order, angs90);
+            const vec = rotateMatrixTo(mat, vectors[i]);
+            expect(vec.toArray()).toEqual(ans);
+        }
+    }
+});
+
+test('rotation matrix from', () => {
+    for (let order of orders) {
+        for (let i = 0; i < 3; i++) {
+            const ans = getCloseVector(answers.rotation_euler_from[order][axes[i]]);
+            const mat = getMatrixEuler(order, angs90);
+            const vec = rotateMatrixFrom(mat, vectors[i]);
+            expect(vec.toArray()).toEqual(ans);
+        }
+    }
+});
+
+test('rotate matrix exceptions', () => {
+    expect(() => {rotateMatrixTo(0, offset);}).toThrow(TypeError);
+    expect(() => {rotateMatrixTo(new Matrix(), 'abc');}).toThrow(TypeError);
+
+    expect(() => {rotateMatrixFrom(0, offset);}).toThrow(TypeError);
+    expect(() => {rotateMatrixFrom(new Matrix(), new Matrix());}).toThrow(TypeError);
+});
 
 test('rotation offset to', () => {
     for (let order of orders) {
@@ -108,6 +166,16 @@ test('rotation offset to', () => {
             expect(vec.toArray()).toEqual(ans);
         }
     }
+});
+
+test('rotation offset exceptions', () => {
+    expect(() => {rotateOffsetTo(1, offset, offset);}).toThrow(TypeError);
+    expect(() => {rotateOffsetTo(new Matrix(), 0, offset);}).toThrow(TypeError);
+    expect(() => {rotateOffsetTo(new Matrix(), offset, 'abcd');}).toThrow(TypeError);
+
+    expect(() => {rotateOffsetFrom(3.14, offset, offset);}).toThrow(TypeError);
+    expect(() => {rotateOffsetFrom(new Matrix(), new Matrix(), offset);}).toThrow(TypeError);
+    expect(() => {rotateOffsetFrom(new Matrix(), offset, {});}).toThrow(TypeError);
 });
 
 test('rotation offset from', () => {
@@ -128,20 +196,6 @@ test('rotation from to', () => {
                 const ans = getCloseMatrix(answers.rotation_from_to[orderFrom][orderTo]);
                 const mat = getMatrixFromTo(orderFrom, angs90, orderTo, angs90);
                 expect(mat.toArray()).toEqual(ans);
-            }
-        }
-    }
-});
-
-test('reference frame from to offset', () => {
-    for (let orderFrom of orders) {
-        const refFrom = new ReferenceFrame(orderFrom, angs90);
-        for (let orderTo of orders) {
-            const refTo = new ReferenceFrame(orderTo, angs90, offset);
-            for (let i = 0; i < 3; i++) {
-                const ans = getCloseVector(answers.rotation_refframe_from_to_offset[orderFrom][orderTo][axes[i]]);
-                const vec = refFrom.rotateToFrame(refTo, vectors[i]);
-                expect(vec.toArray()).toEqual(ans);
             }
         }
     }

@@ -4,36 +4,36 @@ const {Order, Axis} = require('./order.js');
 
 function getMatrixAxis(axis, angle) {
     if (!(axis instanceof Axis.Direction)) {
-        throw 'axis is not an Axis.Direction';
+        throw TypeError('axis is not an Axis.Direction');
     }
     if (isNaN(angle)) {
-        throw 'angle is not a number';
+        throw TypeError('angle is not a number');
     }
     return _getRotationMatrix(axis, angle);
 }
 
 function getMatrixEuler(order, angles) {
     if (!(order instanceof Order)) {
-        throw 'order is not an Order type';
+        throw TypeError('order is not an Order type');
     }
     if (!(angles instanceof Angles)) {
-        throw 'angles is not an Angles type';
+        throw TypeError('angles is not an Angles type');
     }
     return _getEulerMatrix(order, angles);
 }
 
 function getMatrixFromTo(orderFrom, anglesFrom, orderTo, anglesTo) {
     if (!(orderFrom instanceof Order)) {
-        throw 'orderFrom is not an Order type';
+        throw TypeError('orderFrom is not an Order type');
     }
     if (!(orderTo instanceof Order)) {
-        throw 'orderTo is not an Order type';
+        throw TypeError('orderTo is not an Order type');
     }
     if (!(anglesFrom instanceof Angles)) {
-        throw 'anglesFrom is not an Angles type';
+        throw TypeError('anglesFrom is not an Angles type');
     }
     if (!(anglesTo instanceof Angles)) {
-        throw 'anglesTo is not an Angles type';
+        throw TypeError('anglesTo is not an Angles type');
     }
 
     return _getMatrixFromTo(orderFrom, anglesFrom, orderTo, anglesTo);
@@ -41,13 +41,13 @@ function getMatrixFromTo(orderFrom, anglesFrom, orderTo, anglesTo) {
 
 function rotateAxisTo(axis, angle, vector) {
     if (!(axis instanceof Axis.Direction)) {
-        throw 'axis is not an Axis.Direction';
+        throw TypeError('axis is not an Axis.Direction');
     }
     if (isNaN(angle)) {
-        throw 'angle is not a number';
+        throw TypeError('angle is not a number');
     }
     if (!(vector instanceof Vector)) {
-        throw 'vector is not a Vector';
+        throw TypeError('vector is not a Vector');
     }
 
     const mat = _getRotationMatrix(axis, angle);
@@ -56,13 +56,13 @@ function rotateAxisTo(axis, angle, vector) {
 
 function rotateAxisFrom(axis, angle, vector) {
     if (!(axis instanceof Axis.Direction)) {
-        throw 'axis is not an Axis.Direction';
+        throw TypeError('axis is not an Axis.Direction');
     }
     if (isNaN(angle)) {
-        throw 'angle is not a number';
+        throw TypeError('angle is not a number');
     }
     if (!(vector instanceof Vector)) {
-        throw 'vector is not a Vector';
+        throw TypeError('vector is not a Vector');
     }
 
     const mat = _getRotationMatrix(axis, angle);
@@ -71,13 +71,13 @@ function rotateAxisFrom(axis, angle, vector) {
 
 function rotateEulerTo(order, angles, vector) {
     if (!(order instanceof Order)) {
-        throw 'order is not an Order';
+        throw TypeError('order is not an Order');
     }
     if (!(angles instanceof Angles)) {
-        throw 'angles is not an Angles';
+        throw TypeError('angles is not an Angles');
     }
     if (!(vector instanceof Vector)) {
-        throw 'vector is not a Vector';
+        throw TypeError('vector is not a Vector');
     }
 
     const mat = _getEulerMatrix(order, angles);
@@ -86,13 +86,13 @@ function rotateEulerTo(order, angles, vector) {
 
 function rotateEulerFrom(order, angles, vector) {
     if (!(order instanceof Order)) {
-        throw 'order is not an Order';
+        throw TypeError('order is not an Order');
     }
     if (!(angles instanceof Angles)) {
-        throw 'angles is not an Angles';
+        throw TypeError('angles is not an Angles');
     }
     if (!(vector instanceof Vector)) {
-        throw 'vector is not a Vector';
+        throw TypeError('vector is not a Vector');
     }
 
     const mat = _getEulerMatrix(order, angles);
@@ -101,10 +101,10 @@ function rotateEulerFrom(order, angles, vector) {
 
 function rotateMatrixTo(matrix, vector) {
     if (!(matrix instanceof Matrix)) {
-        throw 'matrix is not a Matrix';
+        throw TypeError('matrix is not a Matrix');
     }
     if (!(vector instanceof Vector)) {
-        throw 'vector is not a Vector';
+        throw TypeError('vector is not a Vector');
     }
 
     return vector.multiply(matrix);
@@ -112,10 +112,10 @@ function rotateMatrixTo(matrix, vector) {
 
 function rotateMatrixFrom(matrix, vector) {
     if (!(matrix instanceof Matrix)) {
-        throw 'matrix is not a Matrix';
+        throw TypeError('matrix is not a Matrix');
     }
     if (!(vector instanceof Vector)) {
-        throw 'vector is not a Vector';
+        throw TypeError('vector is not a Vector');
     }
 
     return matrix.multiply(vector);
@@ -123,13 +123,13 @@ function rotateMatrixFrom(matrix, vector) {
 
 function rotateOffsetTo(matrix, offset, vector) {
     if (!(matrix instanceof Matrix)) {
-        throw 'matrix is not a Matrix';
+        throw TypeError('matrix is not a Matrix');
     }
     if (!(offset instanceof Vector)) {
-        throw 'offset is not a Vector';
+        throw TypeError('offset is not a Vector');
     }
     if (!(vector instanceof Vector)) {
-        throw 'vector is not a Vector';
+        throw TypeError('vector is not a Vector');
     }
 
     const relativeVector = vector.subtract(offset);
@@ -138,13 +138,13 @@ function rotateOffsetTo(matrix, offset, vector) {
 
 function rotateOffsetFrom(matrix, offset, vector) {
     if (!(matrix instanceof Matrix)) {
-        throw 'matrix is not a Matrix';
+        throw TypeError('matrix is not a Matrix');
     }
     if (!(offset instanceof Vector)) {
-        throw 'offset is not a Vector';
+        throw TypeError('offset is not a Vector');
     }
     if (!(vector instanceof Vector)) {
-        throw 'vector is not a Vector';
+        throw TypeError('vector is not a Vector');
     }
 
     const rotatedVector = matrix.multiply(vector);
@@ -179,11 +179,9 @@ function _getRotationMatrix(axis, angle) {
     else if (axis == Axis.Y_AXIS) {
         return _getYRotation(angle);
     }
-    else if (axis == Axis.Z_AXIS) {
-        return _getZRotation(angle);
-    }
     else {
-        throw `axis enumeration value ${axis} must be in [0-2]`;
+    // else if (axis == Axis.Z_AXIS) {
+        return _getZRotation(angle);
     }
 }
 
@@ -224,7 +222,3 @@ module.exports.rotateMatrixTo = rotateMatrixTo
 module.exports.rotateMatrixFrom = rotateMatrixFrom
 module.exports.rotateOffsetTo = rotateOffsetTo
 module.exports.rotateOffsetFrom = rotateOffsetFrom
-
-// module.exports = { getMatrixAxis, getMatrixEuler, getMatrixFromTo, rotateAxisTo,
-//     rotateAxisFrom, rotateEulerTo, rotateAxisFrom, rotateEulerTo, rotateEulerFrom,
-//     rotateMatrixTo, rotateMatrixFrom, rotateOffsetTo, rotateOffsetFrom }

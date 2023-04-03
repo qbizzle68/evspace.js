@@ -17,12 +17,14 @@ test('construct matrices', () => {
     }
     expect(failConstructorLength2).toThrow(RangeError);
     expect(failConstructorLength4).toThrow(RangeError);
-    expect(()=>{new Matrix([1, 2, 3, 4], [1, 2, 3], [1, 2, 3])}).toThrow(RangeError);
-    expect(()=>{new Matrix([1, 2], [1, 2, 3], [1, 2, 3])}).toThrow(RangeError);
-    expect(()=>{new Matrix([1, 2, 3], [1, 2, 3, 4], [1, 2, 3])}).toThrow(RangeError);
-    expect(()=>{new Matrix([1, 2, 3], [1, 2], [1, 2, 3])}).toThrow(RangeError);
-    expect(()=>{new Matrix([1, 2, 3], [1, 2, 3], [1, 2, 3, 4])}).toThrow(RangeError);
-    expect(()=>{new Matrix([1, 2, 3], [1, 2, 3], [1, 2])}).toThrow(RangeError);
+    expect(()=>{new Matrix([[1, 2, 3, 4], [1, 2, 3], [1, 2, 3]])}).toThrow(RangeError);
+    expect(()=>{new Matrix([[1, 2], [1, 2, 3], [1, 2, 3]])}).toThrow(RangeError);
+    expect(()=>{new Matrix([[1, 2, 3], [1, 2, 3, 4], [1, 2, 3]])}).toThrow(RangeError);
+    expect(()=>{new Matrix([[1, 2, 3], [1, 2], [1, 2, 3]])}).toThrow(RangeError);
+    expect(()=>{new Matrix([[1, 2, 3], [1, 2, 3], [1, 2, 3, 4]])}).toThrow(RangeError);
+    expect(()=>{new Matrix([[1, 2, 3], [1, 2, 3], [1, 2]])}).toThrow(RangeError);
+    expect(()=>{new Matrix([[1, 2, 3], [1, 'a', 3], [1, 2, 3]])}).toThrow(TypeError);
+
 });
 
 test('iterating matrix rows', () => {
@@ -170,7 +172,7 @@ test('set operator', () => {
 test('matrix toArray', () => {
     const mat1 = new Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]]);
     expect(mat1.toArray()).toStrictEqual([[1, 2, 3], [4, 5, 6], [7, 8, 9]]);
-})
+});
 
 test('matrix toObject', () => {
     const mat1 = new Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]]);
@@ -179,4 +181,10 @@ test('matrix toObject', () => {
                  r2: {c0: 7, c1: 8, c2: 9}};
     
     expect(mat1.toObject()).toStrictEqual(ans);    
-})
+});
+
+test('matrix toString', () => {
+    const mat = new Matrix([[1.2345, 1.2345, 1.2345], [1.2345, 1.2345, 1.2345], [1.2345, 1.2345, 1.2345]]);
+    expect(mat.toString()).toBe('[[ 1.2345, 1.2345, 1.2345 ]\n[ 1.2345, 1.2345, 1.2345 ]\n[ 1.2345, 1.2345, 1.2345 ]]');
+    expect(mat.toString(3)).toBe('[[ 1.234, 1.234, 1.234 ]\n[ 1.234, 1.234, 1.234 ]\n[ 1.234, 1.234, 1.234 ]]');
+});
