@@ -2,12 +2,13 @@
   "name": "evspace",
   "version": "0.1.0",
   "description": "3-dimensional Euclidean vector space module.",
-  "main": "evspace.js",
+  "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "browserify index.js --standalone EVSpace > build/evspace.js && cat build/evspace.js | uglifyjs -mc > build/evspace.min.js"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,8 @@
   },
   "homepage": "https://github.com/qbizzle68/evspace.js#readme",
   "devDependencies": {
-    "jest": "^29.5.0"
+    "browserify": "^17.0.0",
+    "jest": "^29.5.0",
+    "uglify-js": "^3.17.4"
   }
 }
